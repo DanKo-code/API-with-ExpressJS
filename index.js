@@ -1,14 +1,31 @@
-import http from 'http'
+import express from 'express'
 
-const host = '127.0.0.1'
 const port = 8000
+const app = express()
 
-const server = http.createServer((req, res) => {
-    res.statusCode = 200
-    res.setHeader('Content-Type', 'text/plain')
-    res.end('Hello!')
+app.all('/hello', (req, res, next) => {
+    console.log('All')
+    next()
 })
 
-server.listen(port, host, () => {
-    console.log(`Server launched on ${host}:${port}`)
+const cb = (req, res, next) => {
+    console.log('CB')
+    next()
+}
+
+// app.get('/hello', [cb, cb, (req, res) => {
+//     res.send('Hello!')
+// }])
+
+//ERROR???
+app.route('/user')
+    .get('/hello', (req, res) => {
+        res.send('Hello!')
+    })
+    .post('/hello', (req, res) => {
+        res.send('Hello POST')
+    })
+
+app.listen(port, () => {
+    console.log(`Server launched on http://localhost:${port}`)
 })
